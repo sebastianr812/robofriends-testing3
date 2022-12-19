@@ -30,4 +30,5 @@ workflows:
       - useless_job
       - tests:
           requires:
-            - tests
+            - useless_job
+            
