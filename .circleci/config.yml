@@ -1,20 +1,34 @@
 version: 2.0
 jobs: 
-  bobby:
+  build:
     docker:
-      - image: circleci/ruby:2.4.1
+      - image: circleci/node:erbium-bullseye-browsers-legacy
     steps:
       - checkout
-      - run: echo "A first hello"
-  sally:
+      - run: echo "going to npm install"
+      - run: npm install
+      - run: CI=true npm run build 
+  tests:
     docker:
-      - image: circleci/ruby:2.4.1
+      - image: circleci/node:erbium-bullseye-browsers-legacy
     steps:
       - checkout
-      - run: echo "double trouble baby"
+      - run: echo "going to run tests"
+      - run: npm install
+      - run: npm test a
+  useless_job:
+    docker:
+      - image: circleci/node:erbium-bullseye-browsers-legacy
+    steps:
+      - checkout
+      - run: echo "hellloooo this is so useless"
 workflows: 
   version: 2
-  bobby_sally:
+  build_test_and_lint:
     jobs:
-      - bobby
-      - sally
+      - build
+      - useless_job
+      - tests:
+          requires:
+            - useless_job
+            
