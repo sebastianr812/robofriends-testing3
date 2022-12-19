@@ -17,12 +17,17 @@ jobs:
       - run: npm install
       - run: npm test
   useless_job:
+    docker:
+      - image: circleci/node:8.9
     steps:
       - checkout
       - run: echo "hellloooo this is so useless"
 workflows: 
   version: 2
-  bobby_sally:
+  build_test_and_lint:
     jobs:
-      - bobby
-      - sally
+      - build
+      - useless_job
+      - tests:
+          requires:
+            - tests
